@@ -1,6 +1,5 @@
 --TEST--
 XHPRrof: Basic Profiling Test
-Author: Kannan
 --FILE--
 <?php
 

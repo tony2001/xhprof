@@ -54,7 +54,7 @@ function my_call_user_func_array_safe($function, $args = array()) {
 
 
 class test_call_user_func {
-  function test_call_user_func($test_func = 'foo',
+  function __construct($test_func = 'foo',
                                $arg1      = 'user_func test') {
     call_user_func($test_func, $arg1);
   }
