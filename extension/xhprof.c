@@ -1776,20 +1776,17 @@ static char **hp_strings_in_zval(zval  *values) {
 
   if (Z_TYPE_P(values) == IS_ARRAY) {
     HashTable *ht;
+    zend_string *str_key;
+    zend_ulong num_index;
 
     ht    = Z_ARRVAL_P(values);
     count = zend_hash_num_elements(ht);
 
     result = (char**)emalloc(sizeof(char*) * (count + 1));
 
-	ZEND_HASH_FOREACH_VAL_IND(ht, data) {
-		zend_string *str_key;
-		zend_ulong num_index;
-		int type;
-
-		type = zend_hash_get_current_key(ht, &str_key, &num_index);
+	ZEND_HASH_FOREACH_KEY_VAL_IND(ht, num_index, str_key, data) {
 		/* Get the names stored in a standard array */
-		if (type == HASH_KEY_IS_LONG) {
+		if (!str_key) {
 			if (Z_TYPE_P(data) == IS_STRING && strcmp(Z_STRVAL_P(data), ROOT_SYMBOL)) { /* do not ignore "main" */
 				result[ix] = estrdup(Z_STRVAL_P(data));
 				ix++;
