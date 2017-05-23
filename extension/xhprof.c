@@ -1171,7 +1171,8 @@ static double get_cpu_frequency() {
  * @author cjiang
  */
 static void get_all_cpu_frequencies() {
-  int id;
+  int id, n;
+  int wrong_cpu_num;
   double frequency;
 
   hp_globals.cpu_frequencies = malloc(sizeof(double) * hp_globals.cpu_num);
@@ -1179,12 +1180,15 @@ static void get_all_cpu_frequencies() {
     return;
   }
 
+  n = 0;
+  id = 0;
+  wrong_cpu_num = hp_globals.cpu_num + 4 /* workaround for kernel bug when CPU cores are enumerated in a wrong way */;
   /* Iterate over all cpus found on the machine. */
-  for (id = 0; id < hp_globals.cpu_num; ++id) {
+  for (n = 0; n < wrong_cpu_num; n++) {
     /* Only get the previous cpu affinity mask for the first call. */
     if (bind_to_cpu(id)) {
-      clear_frequencies();
-      return;
+      n++;
+      continue;
     }
 
     /* Make sure the current process gets scheduled to the target cpu. This
@@ -1193,10 +1197,11 @@ static void get_all_cpu_frequencies() {
 
     frequency = get_cpu_frequency();
     if (frequency == 0.0) {
-      clear_frequencies();
-      return;
+      n++;
+      continue;
     }
     hp_globals.cpu_frequencies[id] = frequency;
+    id++;
   }
 }
 
