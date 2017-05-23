@@ -787,8 +787,8 @@ static char *hp_get_function_name(zend_execute_data *data TSRMLS_DC) {
        */
       if (curr_func->common.scope) {
         cls = curr_func->common.scope->name;
-      } else if (data->called_scope) {
-        cls = data->called_scope->name;
+      } else if (data->func->common.scope) {
+        cls = data->func->common.scope->name;
       }
 
       if (cls) {
