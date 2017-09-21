@@ -1084,7 +1084,7 @@ int bind_to_cpu(uint32 cpu_id) {
   CPU_SET(cpu_id, &new_mask);
 
   if (SET_AFFINITY(0, sizeof(cpu_set_t), &new_mask) < 0) {
-    perror("setaffinity");
+    //perror("setaffinity");
     return -1;
   }
 
@@ -1182,7 +1182,7 @@ static void get_all_cpu_frequencies() {
 
   n = 0;
   id = 0;
-  wrong_cpu_num = hp_globals.cpu_num + 4 /* workaround for kernel bug when CPU cores are enumerated in a wrong way */;
+  wrong_cpu_num = hp_globals.cpu_num + 8 /* workaround for kernel bug when CPU cores are enumerated in a wrong way */;
   /* Iterate over all cpus found on the machine. */
   for (n = 0; n < wrong_cpu_num; n++) {
     /* Only get the previous cpu affinity mask for the first call. */
@@ -1216,7 +1216,7 @@ static void get_all_cpu_frequencies() {
  */
 int restore_cpu_affinity(cpu_set_t * prev_mask) {
   if (SET_AFFINITY(0, sizeof(cpu_set_t), prev_mask) < 0) {
-    perror("restore setaffinity");
+    //perror("restore setaffinity");
     return -1;
   }
   /* default value ofor cur_cpu_id is 0. */
